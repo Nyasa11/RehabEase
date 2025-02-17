@@ -1,0 +1,71 @@
+<!-- templates/login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login with Google</title>
+  <script type="module">
+    // Import Firebase modules from the CDN
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+    // Your Firebase configuration (use your own values)
+    const firebaseConfig = {
+      apiKey: "AIzaSyDmEYFQQ5tRcWVPodph3VFiM4ruOR9SOqo",
+      authDomain: "physio-dev-app.firebaseapp.com",
+      projectId: "physio-dev-app",
+      storageBucket: "physio-dev-app.firebasestorage.app",
+      messagingSenderId: "920994387671",
+      appId: "1:920994387671:web:28f8ed1c688e1a96f90292"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    // Function to sign in with Google
+    window.signInWithGoogle = async () => {
+      try {
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        console.log("User signed in:", user);
+        // Optionally retrieve ID token:
+        const idToken = await user.getIdToken();
+        console.log("ID Token:", idToken);
+        // Redirect to categories page (or desired landing page)
+        window.location.href = "/categories";
+      } catch (error) {
+        console.error("Error during sign in:", error);
+        alert("Error signing in. Please try again.");
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f0f2f5;
+      margin: 0;
+      padding: 50px;
+    }
+    button {
+      background: #4285F4;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 18px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #357ae8;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to RehabEase</h1>
+  <p>Please log in to continue.</p>
+  <button onclick="signInWithGoogle()">Login with Google</button>
+</body>
+</html>
