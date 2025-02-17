@@ -128,14 +128,45 @@ def exercise_instructions(category, exercise_type):
 # Specific route for Elbow Flexion instructions
 @app.route('/exercises/flexibility/elbow_flexion')
 def elbow_flexion_instructions():
-    # Renders the instructions file: elbow_inst.html
     return render_template('elbow_inst.html')
 
 # Route for the camera-based exercise page
 @app.route('/start-exercises/elbow_flexion')
 def start_elbow_flexion():
-    # Renders the camera-based page elbow_flexion.html
     return render_template('elbow_flexion.html')
+
+@app.route('/exercises/flexibility/knee_flexion')
+def knee_flexion_instructions():
+    return render_template('knee_inst.html')
+
+# Route for the camera-based exercise page
+@app.route('/start-exercises/knee_flexion')
+def start_knee_flexion():
+    return render_template('knee_flexion.html')
+
+@app.route('/exercises/balance/single_leg_stand')
+def single_leg_stand_instructions():
+    return render_template('single_leg_stand_inst.html')
+
+@app.route('/start-exercises/single_leg_stand')
+def start_single_leg_stand():
+    return render_template('single_leg_stand.html')
+
+@app.route('/exercises/balance/single_leg_stand_front')
+def single_leg_stand_front_instructions():
+    return render_template('single_leg_stand_front_inst.html')
+
+@app.route('/start-exercises/single_leg_stand_front')
+def start_single_leg_stand_front():
+    return render_template('single_leg_stand_front.html')
+
+@app.route('/exercises/balance/arm_raise')
+def arm_raise_instructions():
+    return render_template('arm_raise_inst.html')
+
+@app.route('/start-exercises/arm_raise')
+def start_arm_raise():
+    return render_template('arm_raise.html')
 
 # Error handlers
 @app.errorhandler(404)
