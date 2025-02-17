@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login with Google</title>
   <script type="module">
     // Import Firebase modules from the CDN
@@ -26,20 +27,31 @@
 
     // Function to sign in with Google
     window.signInWithGoogle = async () => {
-      try {
-        const result = await signInWithPopup(auth, provider);
-        const user = result.user;
-        console.log("User signed in:", user);
-        // Optionally retrieve ID token:
-        const idToken = await user.getIdToken();
-        console.log("ID Token:", idToken);
-        // Redirect to categories page (or desired landing page)
-        window.location.href = "/categories";
-      } catch (error) {
-        console.error("Error during sign in:", error);
-        alert("Error signing in. Please try again.");
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      const idToken = await user.getIdToken(); // Get ID token
+
+      // Send token to Flask backend
+      const response = await fetch('/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `idToken=${encodeURIComponent(idToken)}`
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        window.location.href = "/categories"; // Redirect after success
+      } else {
+        alert("Login failed: " + data.message);
       }
+    } catch (error) {
+      console.error("Error during sign in:", error);
+      alert("Error signing in. Please try again.");
     }
+      };
   </script>
   <style>
     body {
