@@ -1,6 +1,12 @@
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request, jsonify, session
+import firebase_admin
+from firebase_admin import auth, credentials
 import os
 from datetime import datetime
+
+# Initialize Firebase Admin SDK
+cred = credentials.Certificate("physio-dev-app-firebase-adminsdk-fbsvc-206ab629dd.json")
+firebase_admin.initialize_app(cred)
 
 app = Flask(__name__)
 
@@ -104,7 +110,9 @@ def home():
 
 @app.route('/categories')
 def categories():
-    return render_template('categories.html')  # or your categories page
+    # if 'user' not in session:
+    #     return redirect(url_for('login'))  # Redirect to login if not authenticated
+    return render_template('categories.html')
 
 @app.route('/<category>')
 def category_page(category):
@@ -136,6 +144,20 @@ def elbow_flexion_instructions():
 def start_elbow_flexion():
     # Renders the camera-based page elbow_flexion.html
     return render_template('elbow_flexion.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        id_token = request.form['idToken']  # This token comes from Firebase Authentication on the frontend
+        
+        try:
+            decoded_token = auth.verify_id_token(id_token)  # Verify Firebase token
+            session['user'] = decoded_token['uid']  # Store user session
+            return jsonify({"success": True, "message": "Login successful"})
+        except Exception as e:
+            return jsonify({"success": False, "message": str(e)}), 401  # Unauthorized
+
+    return render_template('login.html')
 
 # Error handlers
 @app.errorhandler(404)
