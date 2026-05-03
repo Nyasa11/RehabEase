@@ -111,8 +111,6 @@ RehabEase/
 ├── static/              # Static assets
 ├── templates/           # HTML templates
 ├── assets/              # README screenshots
-└── flutter_app/         # Flutter mobile frontend
-```
 
 ---
 
